@@ -134,30 +134,37 @@ Content-Type: application/json
 \`\`\`
 
 ## 📁 Project Structure
-## 📁 Project Structure
-
-
-se-demo-crud-mongo-kat/
+<pre>
+Inventory-Store-API/
 ├── config/
-│   └── db.js                 # Database connection
+│   └── db.js
 ├── controllers/
-│   ├── productController.js  # Product business logic
-│   ├── supplierController.js # Supplier business logic
-│   └── orderController.js    # Order business logic
+│   ├── productController.js
+│   ├── supplierController.js
+│   └── orderController.js
 ├── models/
-│   ├── Product.js           # Product schema
-│   ├── Supplier.js          # Supplier schema
-│   └── Order.js             # Order schema
+│   ├── Product.js
+│   ├── Supplier.js
+│   └── Order.js
 ├── routes/
-│   ├── productRoutes.js     # Product endpoints
-│   ├── supplierRoutes.js    # Supplier endpoints
-│   └── orderRoutes.js       # Order endpoints
-├── .env                     # Environment variables
-├── .gitignore              # Git ignore rules
-├── app.js                  # Main application
-├── package.json            # Dependencies and scripts
-└── seedData.js             # Database seeder
-
+│   ├── productRoutes.js
+│   ├── supplierRoutes.js
+│   └── orderRoutes.js
+├── public/
+│   ├── diagnostic.html
+│   ├── index.html
+│   └── simple-test.html
+├── .env
+├── .gitignore
+├── app.js
+├── package.json
+├── package-lock.json
+├── seedData.js
+├── test-db.js
+├── README.md
+├── SUBMISSION.md
+└── Inventory-Store-API.postman_collection.json
+</pre>
 
 ## 🚀 Quick Start
 
