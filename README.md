@@ -136,7 +136,7 @@ Content-Type: application/json
 ## 📁 Project Structure
 ## 📁 Project Structure
 
-\`\`\`
+
 se-demo-crud-mongo-kat/
 ├── config/
 │   └── db.js                 # Database connection
@@ -157,7 +157,7 @@ se-demo-crud-mongo-kat/
 ├── app.js                  # Main application
 ├── package.json            # Dependencies and scripts
 └── seedData.js             # Database seeder
-\`\`\`
+
 
 ## 🚀 Quick Start
 
