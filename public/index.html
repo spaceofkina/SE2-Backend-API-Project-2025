@@ -1,0 +1,445 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+            padding: 30px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 0;
+        }
+        
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 12px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            color: #d81b60;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            font-weight: 300;
+            color: #d81b60;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 32px;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 4px 20px rgba(216, 27, 96, 0.08);
+            border: 1px solid #f8bbd9;
+            transition: all 0.3s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(216, 27, 96, 0.12);
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 28px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f8bbd9;
+        }
+        
+        .section-icon {
+            font-size: 1.8rem;
+            margin-right: 16px;
+            color: #d81b60;
+        }
+        
+        .section-title {
+            font-size: 1.6rem;
+            color: #d81b60;
+            font-weight: 500;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid #f8bbd9;
+            background: #fefafd;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #fce4ec, #f8bbd9);
+            color: #c2185b;
+            padding: 16px;
+            text-align: left;
+            font-weight: 500;
+            font-size: 0.95rem;
+            border-bottom: 2px solid #f8bbd9;
+        }
+        
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #fce4ec;
+            color: #555;
+            font-size: 0.95rem;
+        }
+        
+        tr:hover {
+            background: #fef7fa;
+        }
+        
+        .status {
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-block;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        
+        .status-completed {
+            background: #d1edff;
+            color: #004085;
+            border: 1px solid #b3d9ff;
+        }
+        
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f1b0b7;
+        }
+        
+        .price {
+            color: #28a745;
+            font-weight: 500;
+        }
+        
+        .stock-low {
+            color: #dc3545;
+            font-weight: 500;
+        }
+        
+        .stock-good {
+            color: #28a745;
+            font-weight: 500;
+        }
+        
+        .email {
+            color: #d81b60;
+            font-weight: 400;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #d81b60;
+            font-size: 1rem;
+            font-style: italic;
+        }
+        
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #f8bbd9, #f48fb1);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(244, 143, 177, 0.2);
+        }
+        
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 300;
+            margin-bottom: 6px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .section {
+                padding: 24px;
+            }
+            
+            th, td {
+                padding: 12px 10px;
+                font-size: 0.9rem;
+            }
+            
+            .stats-bar {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Inventory Management System</h1>
+            <p>Comprehensive inventory tracking and management</p>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-number" id="totalProducts">0</div>
+                <div class="stat-label">Total Products</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalSuppliers">0</div>
+                <div class="stat-label">Active Suppliers</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalOrders">0</div>
+                <div class="stat-label">Total Orders</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="inventoryValue"></div>
+                <div class="stat-label">Inventory Value</div>
+            </div>
+        </div>
+
+        <div class="dashboard">
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon"></div>
+                    <h2 class="section-title">Products</h2>
+                </div>
+                <div class="table-container">
+                    <table id="productsTable">
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>SKU</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsBody">
+                            <tr>
+                                <td colspan="5" class="loading">Loading products...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon"></div>
+                    <h2 class="section-title">Suppliers</h2>
+                </div>
+                <div class="table-container">
+                    <table id="suppliersTable">
+                        <thead>
+                            <tr>
+                                <th>Supplier Name</th>
+                                <th>Contact Email</th>
+                                <th>Phone</th>
+                                <th>Date Added</th>
+                            </tr>
+                        </thead>
+                        <tbody id="suppliersBody">
+                            <tr>
+                                <td colspan="4" class="loading">Loading suppliers...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon"></div>
+                    <h2 class="section-title">Orders</h2>
+                </div>
+                <div class="table-container">
+                    <table id="ordersTable">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Status</th>
+                                <th>Items</th>
+                                <th>Total Amount</th>
+                                <th>Date Created</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersBody">
+                            <tr>
+                                <td colspan="5" class="loading">Loading orders...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3000/api';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Loading inventory data...');
+            loadAllData();
+        });
+
+        async function loadAllData() {
+            try {
+                const [productsData, suppliersData, ordersData] = await Promise.all([
+                    fetch(API_BASE + '/products').then(r => r.json()),
+                    fetch(API_BASE + '/suppliers').then(r => r.json()),
+                    fetch(API_BASE + '/orders').then(r => r.json())
+                ]);
+
+                updateStats(productsData, suppliersData, ordersData);
+                displayProducts(productsData.data || []);
+                displaySuppliers(suppliersData.data || []);
+                displayOrders(ordersData.data || []);
+
+            } catch (error) {
+                console.error('Error loading data:', error);
+                showError('Failed to load inventory data. Please check the console for details.');
+            }
+        }
+
+        function updateStats(products, suppliers, orders) {
+            if (products.success) {
+                document.getElementById('totalProducts').textContent = products.total || products.data.length;
+                const totalValue = products.data.reduce((sum, product) => {
+                    return sum + (product.price * product.stock);
+                }, 0);
+                document.getElementById('inventoryValue').textContent = '$' + totalValue.toLocaleString();
+            }
+
+            if (suppliers.success) {
+                document.getElementById('totalSuppliers').textContent = suppliers.total || suppliers.data.length;
+            }
+
+            if (orders.success) {
+                document.getElementById('totalOrders').textContent = orders.total || orders.data.length;
+            }
+        }
+
+        function displayProducts(products) {
+            const tbody = document.getElementById('productsBody');
+            
+            if (products.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="loading">No products found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = products.map(product => {
+                const stockStatus = product.stock < 10 ? 'stock-low' : 'stock-good';
+                const stockText = product.stock < 10 ? 'Low Stock' : 'In Stock';
+                
+                return '<tr>' +
+                    '<td><strong>' + product.name + '</strong></td>' +
+                    '<td>' + product.sku + '</td>' +
+                    '<td class="price">$' + product.price.toFixed(2) + '</td>' +
+                    '<td class="' + stockStatus + '">' + product.stock + ' units</td>' +
+                    '<td><span class="status status-' + (product.stock < 10 ? 'cancelled' : 'completed') + '">' + stockText + '</span></td>' +
+                '</tr>';
+            }).join('');
+        }
+
+        function displaySuppliers(suppliers) {
+            const tbody = document.getElementById('suppliersBody');
+            
+            if (suppliers.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="loading">No suppliers found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = suppliers.map(supplier => {
+                const createdDate = new Date(supplier.createdAt).toLocaleDateString();
+                
+                return '<tr>' +
+                    '<td><strong>' + supplier.name + '</strong></td>' +
+                    '<td class="email">' + supplier.contact.email + '</td>' +
+                    '<td>' + (supplier.contact.phone || 'Not provided') + '</td>' +
+                    '<td>' + createdDate + '</td>' +
+                '</tr>';
+            }).join('');
+        }
+
+        function displayOrders(orders) {
+            const tbody = document.getElementById('ordersBody');
+            
+            if (orders.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="loading">No orders found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = orders.map(order => {
+                const createdDate = new Date(order.createdAt).toLocaleDateString();
+                const shortId = order._id ? order._id.slice(-6) : 'N/A';
+                
+                return '<tr>' +
+                    '<td><strong>#' + shortId + '</strong></td>' +
+                    '<td><span class="status status-' + order.status + '">' + order.status + '</span></td>' +
+                    '<td>' + (order.items ? order.items.length : 0) + ' items</td>' +
+                    '<td class="price">$' + (order.totalAmount || 0).toFixed(2) + '</td>' +
+                    '<td>' + createdDate + '</td>' +
+                '</tr>';
+            }).join('');
+        }
+
+        function showError(message) {
+            const errorStyle = 'style="color: #dc3545;"';
+            document.getElementById('productsBody').innerHTML = '<tr><td colspan="5" class="loading" ' + errorStyle + '>' + message + '</td></tr>';
+            document.getElementById('suppliersBody').innerHTML = '<tr><td colspan="4" class="loading" ' + errorStyle + '>' + message + '</td></tr>';
+            document.getElementById('ordersBody').innerHTML = '<tr><td colspan="5" class="loading" ' + errorStyle + '>' + message + '</td></tr>';
+        }
+
+        setInterval(loadAllData, 30000);
+    </script>
+</body>
+</html>

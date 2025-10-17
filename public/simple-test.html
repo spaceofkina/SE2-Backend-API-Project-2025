@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Store Management</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .card { border: 1px solid #ccc; padding: 20px; margin: 10px; border-radius: 5px; }
+        .loading { color: #666; }
+    </style>
+</head>
+<body>
+    <h1>Inventory Store - SIMPLE TEST</h1>
+    
+    <div class="card">
+        <h3>Products</h3>
+        <div id="productList" class="loading">Loading products...</div>
+    </div>
+
+    <div class="card">
+        <h3>Suppliers</h3>
+        <div id="supplierList" class="loading">Loading suppliers...</div>
+    </div>
+
+    <div class="card">
+        <h3>Orders</h3>
+        <div id="orderList" class="loading">Loading orders...</div>
+    </div>
+
+    <script>
+        console.log('SCRIPT STARTED');
+        
+        // Simple test - does basic JavaScript work?
+        setTimeout(() => {
+            console.log('Timeout executed - JavaScript is working');
+            document.getElementById('productList').innerHTML = 'JavaScript is working!';
+        }, 1000);
+
+        // Test API call
+        async function testAPI() {
+            try {
+                console.log('Testing API call...');
+                const response = await fetch('http://localhost:3000/api/products');
+                const data = await response.json();
+                console.log('API Success:', data);
+                
+                if (data.success) {
+                    document.getElementById('productList').innerHTML = 
+                        'Products loaded: ' + data.data.length + ' items';
+                    document.getElementById('supplierList').innerHTML = 
+                        'API is working!';
+                    document.getElementById('orderList').innerHTML = 
+                        'Data received successfully';
+                }
+            } catch (error) {
+                console.error('API Error:', error);
+                document.getElementById('productList').innerHTML = 'Error: ' + error.message;
+            }
+        }
+
+        // Wait a bit then test the API
+        setTimeout(testAPI, 2000);
+        
+        console.log('SCRIPT FINISHED LOADING');
+    </script>
+</body>
+</html>

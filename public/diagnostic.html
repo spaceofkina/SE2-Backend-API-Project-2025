@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>API Diagnostic Test</title>
+</head>
+<body>
+    <h1>API Diagnostic Test</h1>
+    
+    <div id="test1">
+        <h3>Test 1: Basic Fetch</h3>
+        <button onclick="testBasicFetch()">Test Basic Fetch</button>
+        <div id="result1"></div>
+    </div>
+
+    <div id="test2">
+        <h3>Test 2: Products API</h3>
+        <button onclick="testProductsAPI()">Test Products API</button>
+        <div id="result2"></div>
+    </div>
+
+    <div id="test3">
+        <h3>Test 3: Check Console</h3>
+        <button onclick="checkConsole()">Check Console for Errors</button>
+        <div id="result3"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3000/api';
+
+        async function testBasicFetch() {
+            try {
+                console.log('Testing basic fetch to:', API_BASE + '/products');
+                const response = await fetch(API_BASE + '/products');
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+                
+                const text = await response.text();
+                console.log('Raw response text:', text);
+                
+                const data = JSON.parse(text);
+                document.getElementById('result1').innerHTML = 
+                    ' SUCCESS: Status ' + response.status + '<br>' +
+                    'Data: ' + JSON.stringify(data, null, 2);
+            } catch (error) {
+                console.error('Fetch error:', error);
+                document.getElementById('result1').innerHTML = 
+                    ' ERROR: ' + error.message;
+            }
+        }
+
+        async function testProductsAPI() {
+            try {
+                const response = await fetch(API_BASE + '/products');
+                if (!response.ok) {
+                    throw new Error('HTTP ' + response.status);
+                }
+                const data = await response.json();
+                document.getElementById('result2').innerHTML = 
+                    ' Products loaded: ' + data.data.length + ' items';
+            } catch (error) {
+                document.getElementById('result2').innerHTML = 
+                    ' Failed: ' + error.message;
+            }
+        }
+
+        function checkConsole() {
+            document.getElementById('result3').innerHTML = 
+                ' Check browser console (F12) for detailed logs';
+        }
+    </script>
+</body>
+</html>
