@@ -47,15 +47,16 @@ A complete RESTful API for inventory management system built with Node.js, Expre
 | DELETE | \`/api/orders/:id\` | Delete order |
 
 ## 🛠️ Request Examples
-
+<pre>
 ### Get All Products
 \`\`\`bash
 GET http://localhost:3000/api/products
 GET http://localhost:3000/api/products?page=1&limit=5
 \`\`\`
+</pre>
 
 ### Create Product
-\`\`\`bash
+<pre>
 POST http://localhost:3000/api/products
 Content-Type: application/json
 
@@ -69,10 +70,10 @@ Content-Type: application/json
             "updatedAt": "2025-10-16T11:58:11.247Z",
             "__v": 0
         }
-\`\`\`
+</pre>
 
 ### Create Supplier
-\`\`\`bash
+<pre>
 POST http://localhost:3000/api/suppliers
 Content-Type: application/json
 
@@ -87,10 +88,10 @@ Content-Type: application/json
             "updatedAt": "2025-10-16T12:15:07.838Z",
             "__v": 0
         }
-\`\`\`
+</pre>
 
 ### Create Order
-\`\`\`bash
+<pre>
 POST http://localhost:3000/api/orders
 Content-Type: application/json
 
@@ -131,7 +132,7 @@ Content-Type: application/json
             "updatedAt": "2025-10-16T12:37:46.038Z",
             "__v": 0
         }
-\`\`\`
+</pre>
 
 ## 📁 Project Structure
 <pre>
